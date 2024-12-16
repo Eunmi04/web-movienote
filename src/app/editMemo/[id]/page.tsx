@@ -1,23 +1,54 @@
-import EditMemoForm from '@/components/EditMemoForm'
-const apiUrl = process.env.API_URL
+import { useRouter } from 'next/navigation';
 
-const getMemoById = async (id: string) => {
-  try {
-    const res = await fetch(`${apiUrl}/api/memos/${id}`, {
-      cache: 'no-store',
-    })
-    if (!res.ok) {
-      throw new Error('Failed to fetch memo.')
-    }
-    return res.json()
-  } catch (error) {
-    console.log(error)
-  }
+interface EditMemoFormProps {
+  id: string;
+  title: string;
+  description: string;
 }
 
-export default async function EditMemo({ params }: { params: { id: string } }) {
-  const { id } = params
-  const { memo } = await getMemoById(id)
-  const { title, description } = memo
-  return <EditMemoForm id={id} title={title} description={description} />
+export default function EditMemoForm({ id, title, description }: EditMemoFormProps) {
+  const router = useRouter();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const title = formData.get('title');
+    const description = formData.get('description');
+
+    try {
+      const res = await fetch(`/api/memos/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify({ title, description }),
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to update memo');
+      }
+
+      router.refresh();
+      router.push('/');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        type="text"
+        name="title"
+        placeholder="Title"
+        defaultValue={title}
+      />
+      <textarea
+        name="description"
+        placeholder="Description"
+        defaultValue={description}
+      />
+      <button type="submit">Update Memo</button>
+    </form>
+  );
 }
