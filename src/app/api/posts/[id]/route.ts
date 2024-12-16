@@ -1,40 +1,31 @@
 import connectMongoDB from '@/libs/mongodb'
 import Post from '@/models/post'
 import { NextResponse } from 'next/server'
-import mongoose from 'mongoose'
-
-// 특정 게시글 조회
-export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+// 게시글 목록 조회 및 작성
+export async function GET(request: Request) {
   try {
-    const { id } = params
-    await connectMongoDB() // MongoDB 연결
-
-    // ID를 ObjectId로 변환
-    const objectId = mongoose.Types.ObjectId.isValid(id)
-      ? new mongoose.Types.ObjectId(id)
-      : null
-    if (!objectId) {
-      return NextResponse.json(
-        { message: 'Invalid ID format' },
-        { status: 400 }
-      )
-    }
-
-    const post = await Post.findById(objectId) // ID로 게시글 조회
-
-    if (!post) {
-      return NextResponse.json({ message: 'Post not found!' }, { status: 404 })
-    }
-
-    // MongoDB에서 불러온 게시글의 내용을 반환
-    return NextResponse.json({ post }, { status: 200 })
+    await connectMongoDB()
+    const posts = await Post.find() // 모든 게시글 조회
+    return NextResponse.json(posts)
   } catch (error) {
-    console.error('Error in GET /api/posts/[id]:', error)
+    console.error('Error in GET posts:', error)
     return NextResponse.json(
-      { message: 'Internal server error' },
+      { error: 'Internal Server Error' },
+      { status: 500 }
+    )
+  }
+}
+// 게시글 작성
+export async function POST(request: Request) {
+  try {
+    await connectMongoDB()
+    const data = await request.json()
+    const post = await Post.create(data)
+    return NextResponse.json(post)
+  } catch (error) {
+    console.error('Error in POST posts:', error)
+    return NextResponse.json(
+      { error: 'Internal Server Error' },
       { status: 500 }
     )
   }

@@ -5,6 +5,7 @@ import { FiPlus, FiStar, FiFolderPlus, FiMoreVertical } from 'react-icons/fi'
 import { FaStar } from 'react-icons/fa'
 import Link from 'next/link'
 
+
 interface Memo {
   _id: string
   title: string
@@ -48,7 +49,7 @@ export default function MemoList() {
       })
 
       const data = await res.json()
-      
+
       if (!res.ok) {
         throw new Error('서버 연결에 실패했습니다')
       }
@@ -67,7 +68,6 @@ export default function MemoList() {
       setLoading(false)
     }
   }
-
   useEffect(() => {
     fetchMemos()
   }, [])
@@ -82,13 +82,13 @@ export default function MemoList() {
       })
 
       const data = await res.json()
-      
+
       if (!res.ok) {
         throw new Error(data.message || 'Failed to toggle star')
       }
 
       await fetchMemos()
-      
+
       if (data.memo?.isStarred) {
         setActiveFolder('즐겨찾기')
       }
@@ -336,7 +336,7 @@ export default function MemoList() {
               className="group relative bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200 w-full"
             >
               <div className="absolute -top-2 -right-2 w-8 h-8 bg-gray-100 rounded-br-lg transform rotate-12"></div>
-              
+
               <Link href={`/memo/${memo._id}`}>
                 <div className="p-6">
                   <h2 className="text-xl font-bold text-gray-800 mb-2">{memo.title}</h2>

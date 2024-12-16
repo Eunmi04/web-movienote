@@ -1,23 +1,19 @@
 'use client'
-
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import BoardSidebar from '@/components/BoardSidebar'
-
 interface Post {
   _id: string
   title: string
   author: string // 작성자 추가
   date: string // 작성일 추가
 }
-
 export default function Board() {
   const router = useRouter()
   const { data: session } = useSession() // 세션 정보 가져오기
   const [posts, setPosts] = useState<Post[]>([])
   const [loading, setLoading] = useState(true)
-
   const fetchPosts = async () => {
     try {
       const response = await fetch('/api/posts')
@@ -31,7 +27,6 @@ export default function Board() {
       }
       const data = await response.json()
       console.log('Fetched posts:', data) // API 응답 로그 추가
-
       setPosts(
         data.map((post: any) => ({
           _id: post._id,
@@ -53,7 +48,6 @@ export default function Board() {
   useEffect(() => {
     fetchPosts()
   }, [])
-
   const handleDelete = async (id: string) => {
     if (confirm('정말 삭제하시겠습니까?')) {
       try {
@@ -70,11 +64,9 @@ export default function Board() {
       }
     }
   }
-
   if (loading) {
     return <div>Loading...</div>
   }
-
   return (
     <div className="flex">
       <BoardSidebar />
@@ -89,7 +81,6 @@ export default function Board() {
               글쓰기
             </button>
           </div>
-
           <table className="min-w-full">
             <thead className="bg-gray-100">
               <tr>

@@ -1,7 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-
 export default function MovieNotePage() {
   return (
     <div className="container mx-auto px-4">
@@ -23,7 +22,6 @@ export default function MovieNotePage() {
               사용자는 원하는 영화를 쉽게 찾고, 관련 정보를 확인할 수 있습니다.
             </p>
           </div>
-
           <div className="bg-white shadow-lg rounded-lg p-8 border border-gray-200">
             <h3 className="text-2xl font-semibold mb-4">상세 페이지</h3>
             <Image
@@ -38,7 +36,6 @@ export default function MovieNotePage() {
               줄거리, 출연진, 평점 등을 확인할 수 있습니다.
             </p>
           </div>
-
           <div className="bg-white shadow-lg rounded-lg p-8 border border-gray-200">
             <h3 className="text-2xl font-semibold mb-4">기록 페이지</h3>
             <Image
@@ -53,7 +50,6 @@ export default function MovieNotePage() {
               메모를 추가하고, 수정하며, 삭제할 수 있는 기능을 제공합니다.
             </p>
           </div>
-
           <div className="bg-white shadow-lg rounded-lg p-8 border border-gray-200">
             <h3 className="text-2xl font-semibold mb-4">커뮤니티 페이지</h3>
             <Image
@@ -70,7 +66,6 @@ export default function MovieNotePage() {
           </div>
         </div>
       </section>
-
       {/* MONO 캐릭터 소개 섹션 */}
       <section className="py-24">
         <h2 className="text-3xl font-bold text-center mb-16">페이지 설명</h2>
@@ -91,7 +86,6 @@ export default function MovieNotePage() {
           </div>
         </div>
       </section>
-
       {/* 팀 프로젝트 데모 섹션 */}
       <section className="py-24">
         <h2 className="text-3xl font-bold text-center mb-16">

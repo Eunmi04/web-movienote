@@ -1,7 +1,6 @@
 import connectMongoDB from '@/libs/mongodb'
 import Memo from '@/models/memo'
 import { NextRequest, NextResponse } from 'next/server'
-
 export async function POST(request: NextRequest) {
   try {
     const { title, description } = await request.json()
@@ -22,7 +21,6 @@ export async function POST(request: NextRequest) {
     )
   }
 }
-
 export async function GET() {
   try {
     await connectMongoDB()
@@ -36,23 +34,20 @@ export async function GET() {
     console.error('Error in GET /api/memos:', error)
     return NextResponse.json({
       success: false,
-      message: '메모를 불러오는데 실패했습니다',
+      message: 'Failed to fetch memos',
       memos: []
     }, { status: 500 })
   }
 }
-
 export async function DELETE(request: NextRequest) {
   try {
     await connectMongoDB()
-
     const id = request.nextUrl.searchParams.get('id')
     if (!id) {
       // id가 없으면 전체 삭제
       await Memo.deleteMany({})
       return NextResponse.json({ message: "All memos deleted" })
     }
-
     // id가 있으면 해당 메모만 삭제
     const deletedMemo = await Memo.findByIdAndDelete(id)
     if (!deletedMemo) {

@@ -1,5 +1,4 @@
 import mongoose, { Schema } from 'mongoose'
-
 const memoSchema = new Schema(
   {
     title: { type: String, required: true },
@@ -9,6 +8,5 @@ const memoSchema = new Schema(
   },
   { timestamps: true }
 )
-
 const Memo = mongoose.models.Memo || mongoose.model('Memo', memoSchema)
 export default Memo

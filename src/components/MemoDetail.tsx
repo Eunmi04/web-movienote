@@ -61,7 +61,7 @@ export default function MemoDetail({ id }: { id: string }) {
       })
 
       if (!res.ok) throw new Error('Failed to update folder')
-      
+
       const updatedMemo = await res.json()
       setMemo(updatedMemo.memo)
     } catch (error) {
@@ -142,7 +142,7 @@ export default function MemoDetail({ id }: { id: string }) {
                 </option>
               ))}
             </select>
-            
+
             <div className="flex gap-4">
               <MemoRemoveBtn 
                 id={memo?._id} 

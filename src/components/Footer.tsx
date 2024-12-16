@@ -1,34 +1,48 @@
 import Link from 'next/link'
+import { FaGithub, FaYoutube } from 'react-icons/fa'
 import { IoPeople } from 'react-icons/io5'
-import { FaGithub } from 'react-icons/fa'
 
 export default function Footer() {
   return (
-    <footer className="bg-white border-t">
-      <div className="max-w-7xl mx-auto py-8 px-4">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="text-sm text-gray-500">
-            © 2024 MovieNote. All rights reserved.
-          </div>
-          <div className="flex items-center gap-6">
-            <Link
-              href="/team"
-              className="text-gray-500 hover:text-gray-700 flex items-center gap-2"
-            >
-              <IoPeople className="text-xl" />
-              Team
-            </Link>
-            <Link
-              href="https://github.com/your-repo"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-500 hover:text-gray-700 flex items-center gap-2"
-            >
-              <FaGithub className="text-xl" />
-              GitHub
-            </Link>
-          </div>
+    <footer className="bg-[#2d5a27aa] text-white mt-5">
+      <div className="max-w-6xl mx-auto sm:px-3 lg:px-8 py-6 flex flex-col items-center justify-center">
+        <div className="flex gap-6 mb-3">
+          <a
+            href="https://github.com/tjwls11/web-movienote"
+            className="hover:text-gray-100 inline-flex items-center gap-2 text-base"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <FaGithub className="text-xl" />
+            GitHub
+          </a>
+          <a
+            href="https://youtu.be/LJEtyvKiSeE"
+            className="hover:text-gray-100 inline-flex items-center gap-2 text-base"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <FaYoutube className="text-xl" />
+            YouTube
+          </a>
+          <Link
+            href="/team"
+            className="hover:text-gray-100 inline-flex items-center gap-2 text-base"
+          >
+            <IoPeople className="text-xl" />
+            Team
+          </Link>
+          <Link
+            href="/movienote"
+            className="hover:text-gray-100 inline-flex items-center gap-2 text-base"
+          >
+            <IoPeople className="text-xl" />
+            movienote
+          </Link>
         </div>
+        <p className="text-sm text-gray-300">
+          © {new Date().getFullYear()} Movie Note. All rights reserved.
+        </p>
       </div>
     </footer>
   )

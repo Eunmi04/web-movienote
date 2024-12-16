@@ -40,25 +40,19 @@ export async function PUT(
 }
 
 export async function GET(
-  request: NextRequest,
-  context: { params: { id: string } }
+  request: Request,
+  { params }: { params: { id: string } }
 ) {
   try {
-    const params = await context.params
-    const id = params.id
-    
+    const { id } = await params
     await connectMongoDB()
-    const memo = await Memo.findOne({ _id: id })
+    const memo = await Memo.findById(id)
     if (!memo) {
-      return NextResponse.json({ message: 'Memo not found' }, { status: 404 })
+      return NextResponse.json({ error: '메모를 찾을 수 없습니다' }, { status: 404 })
     }
-    return NextResponse.json({ memo }, { status: 200 })
+    return NextResponse.json({ memo })
   } catch (error) {
-    console.error('Error in GET /api/memos/[id]:', error)
-    return NextResponse.json(
-      { message: 'Internal Server Error' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: '메모 조회에 실패했습니다' }, { status: 500 })
   }
 }
 
