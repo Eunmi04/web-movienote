@@ -1,95 +1,106 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
+import { redirect, useRouter } from 'next/navigation'
+import React, { useState } from 'react'
+import BoardSidebar from '@/components/BoardSidebar'
 
-// API에서 게시글을 가져오는 함수 추가
-const fetchPost = async (id: string) => {
-  const response = await fetch(`/api/posts/${id}`) // 게시글 ID에 따라 API 호출
-  if (!response.ok) {
-    throw new Error('게시글을 가져오는 데 실패했습니다.')
-  }
-  return response.json()
-}
-
-export default function EditPost({ params }: { params: { id: string } }) {
+export default function AddPostPage() {
+  const [title, setTitle] = useState('')
+  const [content, setContent] = useState('')
+  const [category, setCategory] = useState('')
   const router = useRouter()
-  const [post, setPost] = useState({
-    title: '',
-    content: '',
-  })
+  const { data: session } = useSession()
 
-  useEffect(() => {
-    const loadPost = async () => {
-      try {
-        const existingPost = await fetchPost(params.id) // 게시글 데이터 가져오기
-        setPost({
-          title: existingPost.title,
-          content: existingPost.content,
-        })
-      } catch (error) {
-        console.error(error)
-      }
-    }
-    loadPost()
-  }, [params.id])
+  // 세션이 없으면 로그인 페이지로 리디렉션
+  if (!session) {
+    redirect('/login')
+  }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    // 여기에 실제 데이터 수정 로직 구현
-    console.log('수정된 게시글:', post)
-    // 수정 완료 후 상세 페이지로 돌아가기
-    router.push(`/board/${params.id}`)
+
+    if (!title || !content) {
+      alert('Title and content are required')
+      return
+    }
+
+    try {
+      const res = await fetch('/api/posts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ title, content, author: session.user.name }),
+      })
+
+      const responseData = await res.json() // 응답 데이터 확인
+      console.log('Response from POST:', responseData) // 응답 로그 추가
+
+      if (res.ok) {
+        router.push('/board')
+        router.refresh()
+      } else {
+        throw new Error('Failed to create a post')
+      }
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
-    <div className="container mx-auto px-4 py-24">
-      <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-lg p-6">
-        <h1 className="text-2xl font-bold text-gray-800 mb-6">게시글 수정</h1>
+    <div className="flex">
+      <BoardSidebar />
+      <div className="container mx-auto px-4 py-24 flex-1">
+        <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-lg p-6">
+          <h1 className="text-2xl font-bold text-gray-800 mb-6">글쓰기</h1>
 
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label
-              htmlFor="title"
-              className="block text-gray-700 font-medium mb-2"
-            >
-              제목
-            </label>
+          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             <input
               type="text"
-              id="title"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={post.title}
-              onChange={(e) => setPost({ ...post, title: e.target.value })}
+              className="border border-slate-500 p-4"
+              placeholder="게시글 제목"
+              onChange={(e) => setTitle(e.target.value)}
+              value={title}
               required
             />
-          </div>
-
-          <div className="mb-4">
-            <label
-              htmlFor="content"
-              className="block text-gray-700 font-medium mb-2"
-            >
-              내용
-            </label>
             <textarea
-              id="content"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={post.content}
-              onChange={(e) => setPost({ ...post, content: e.target.value })}
+              className="border border-slate-500 p-4 h-64"
+              placeholder="게시글 내용"
+              onChange={(e) => setContent(e.target.value)}
+              value={content}
               required
             />
-          </div>
-
-          <div className="mt-6">
-            <button
-              type="submit"
-              className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+            <select
+              className="border border-slate-500 p-4"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              required
             >
-              수정하기
-            </button>
-          </div>
-        </form>
+              <option value="" disabled>
+                카테고리 선택
+              </option>
+              <option value="category1">카테고리 1</option>
+              <option value="category2">카테고리 2</option>
+              <option value="category3">카테고리 3</option>
+            </select>
+            <div className="flex justify-end gap-4">
+              <button
+                type="button"
+                onClick={() => router.push('/board')}
+                className="px-4 py-2 text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
+              >
+                취소
+              </button>
+              <button
+                className="bg-blue-500 text-white font-bold px-6 py-3 w-fit rounded-md"
+                type="submit"
+              >
+                등록
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   )

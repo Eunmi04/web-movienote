@@ -9,9 +9,11 @@ export async function POST(req: Request) {
   if (!movieId) {
     return NextResponse.json(
       { error: '영화 ID가 필요합니다.' },
+
       { status: 400 }
     )
   }
+
 
   // 데이터베이스에 영화 정보 저장
   const db = await connectToDatabase() // MongoDB에 연결
@@ -19,3 +21,4 @@ export async function POST(req: Request) {
 
   return NextResponse.json({ success: true })
 }
+

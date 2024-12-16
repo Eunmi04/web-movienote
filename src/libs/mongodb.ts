@@ -5,7 +5,6 @@ let client: MongoClient | null = null
 
 export default async function connectMongoDB() {
   try {
-    console.log('MongoDB URI:', process.env.MONGODB_URI)
     await mongoose.connect(process.env.MONGODB_URI as string)
     console.log('몽고디비에 연결되었습니다')
   } catch (error) {
@@ -20,6 +19,7 @@ export async function connectToDatabase() {
     }
     client = new MongoClient(process.env.MONGODB_URI)
     await client.connect()
+    console.log('MongoDB에 연결되었습니다')
   }
   return client.db('movienote') // 데이터베이스 이름으로 수정
 }

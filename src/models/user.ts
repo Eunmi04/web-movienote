@@ -23,3 +23,4 @@ export interface CustomUser {
   createdAt?: string
   provider?: string
 }
+
