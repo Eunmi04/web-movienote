@@ -11,7 +11,7 @@ export default function MemoPage() {
           <div className="flex items-center space-x-3">
             <FiFilm className="w-8 h-8 text-green-600" />
             <h1 className="text-4xl font-bold text-green-600">
-              영화 기록장
+              영화 기록장 페이지
             </h1>
           </div>
           <Link
