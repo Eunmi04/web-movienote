@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { HiPencilAlt } from 'react-icons/hi'
 import MemoRemoveBtn from './MemoRemoveBtn'
+import { Button } from '@/components/ui/button'
 
 interface Memo {
   _id: string
@@ -164,6 +165,13 @@ export default function MemoDetail({ id }: { id: string }) {
           <p>작성일: {new Date(memo.createdAt).toLocaleDateString()}</p>
           <p>수정일: {new Date(memo.updatedAt).toLocaleDateString()}</p>
         </div>
+      </div>
+      <div className="mb-4">
+        <Link href="/memos">
+          <Button className="hover:bg-gray-100">
+            ← 기록장으로 돌아가기
+          </Button>
+        </Link>
       </div>
     </div>
   )
